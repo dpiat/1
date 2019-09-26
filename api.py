@@ -63,7 +63,7 @@ def handle_dialog(req, res):
         return
 
     # Обрабатываем ответ пользователя.
-    if req['request']['original_utterance'].lower() == "какие завтра пары?":
+    if req['request']['original_utterance'].lower() in ["какие завтра пары?"]:
 
         # Пользователь согласился, прощаемся.
         res['response']['text'] = get_first_lessons()

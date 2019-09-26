@@ -1,4 +1,5 @@
 
+
 # coding: utf-8
 # Импортирует поддержку UTF-8.
 from __future__ import unicode_literals
@@ -58,26 +59,17 @@ def handle_dialog(req, res):
             ]
         }
 
-        res['response']['text'] = 'Привет!' + user_id + "test" + req['request']['original_utterance'].lower()
+        res['response']['text'] = 'Привет! Чем я могу помочь?'
         res['response']['buttons'] = get_suggests(user_id)
         return
 
     # Обрабатываем ответ пользователя.
+    res['response']['text'] = req['request']['original_utterance'].lower()
+    return
     if req['request']['original_utterance'].lower() == "какие завтра пары?":
-
-        # Пользователь согласился, прощаемся.
         res['response']['text'] = get_first_lessons()
         return
 
-    if req['request']['original_utterance'].lower() in [
-        'ладно',
-        'куплю',
-        'покупаю',
-        'хорошо',
-    ]:
-        # Пользователь согласился, прощаемся.
-        res['response']['text'] = 'Слона можно найти на Яндекс.Маркете!'
-        return
 
     # Если нет, то убеждаем его купить слона!
     res['response']['text'] = 'Все говорят "%s", а ты купи слона!' % (
@@ -103,7 +95,7 @@ def get_first_lessons():
         1: "",
         2: "",
         3: "",
-        4: "Pravo 9:45",
+        4: "Pravo 9:45, Fizo 16:45",
         5: "",
         6: "",
     }

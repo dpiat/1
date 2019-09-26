@@ -1,3 +1,5 @@
+
+import time
 # coding: utf-8
 # Импортирует поддержку UTF-8.
 from __future__ import unicode_literals
@@ -51,17 +53,23 @@ def handle_dialog(req, res):
 
         sessionStorage[user_id] = {
             'suggests': [
-                "Не хочу.",
-                "Не буду.",
-                "Отстань!",
+                "Какие завтра пары?",
+                "Что задали на завтра?",
+                "Какая следующая пара?",
             ]
         }
 
-        res['response']['text'] = 'Привет! Купи слона!'
+        res['response']['text'] = 'Привет!' + user_id
         res['response']['buttons'] = get_suggests(user_id)
         return
 
     # Обрабатываем ответ пользователя.
+    if req['request']['original_utterance'].lower() == "какие завтра пары?":
+
+        # Пользователь согласился, прощаемся.
+        res['response']['text'] = get_first_lessons()
+        return
+
     if req['request']['original_utterance'].lower() in [
         'ладно',
         'куплю',
@@ -87,18 +95,17 @@ def get_suggests(user_id):
         {'title': suggest, 'hide': True}
         for suggest in session['suggests'][:2]
     ]
-
-    # Убираем первую подсказку, чтобы подсказки менялись каждый раз.
-    session['suggests'] = session['suggests'][1:]
-    sessionStorage[user_id] = session
-
-    # Если осталась только одна подсказка, предлагаем подсказку
-    # со ссылкой на Яндекс.Маркет.
-    if len(suggests) < 2:
-        suggests.append({
-            "title": "Ладно",
-            "url": "https://market.yandex.ru/search?text=слон",
-            "hide": True
-        })
-
     return suggests
+
+def get_first_lessons():
+    daysOfWeek = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"]
+    timetable = {
+        0: "",
+        1: "",
+        2: "",
+        3: "",
+        4: "Pravo 9:45",
+        5: "",
+        6: "",
+    }
+    return timetable[daysOfWeek.index(time.strftime("%a"))]

@@ -58,12 +58,12 @@ def handle_dialog(req, res):
             ]
         }
 
-        res['response']['text'] = 'Привет!' + user_id
+        res['response']['text'] = 'Привет!' + user_id + "test" + req['request']['original_utterance'].lower()
         res['response']['buttons'] = get_suggests(user_id)
         return
 
     # Обрабатываем ответ пользователя.
-    if req['request']['original_utterance'].lower() in ["какие завтра пары?"]:
+    if req['request']['original_utterance'].lower() == "какие завтра пары?":
 
         # Пользователь согласился, прощаемся.
         res['response']['text'] = get_first_lessons()
